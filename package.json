@@ -1,0 +1,26 @@
+{
+  "name": "be-the-cro",
+  "version": "0.1.0",
+  "description": "Be the CRO - An Interactive Risk Management Game",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "start": "tsx src/index.ts",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "simulate": "tsx scripts/simulate.ts"
+  },
+  "dependencies": {
+    "express": "^4.21.0",
+    "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.0.0",
+    "@types/uuid": "^10.0.0",
+    "seedrandom": "^3.0.5",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0",
+    "vitest": "^3.0.0"
+  }
+}
