@@ -8,15 +8,15 @@ import { selectScenarios } from './scenario-selector.js';
 import { assembleNarrativeSnippet, assembleFullNarrative } from './narrative-assembler.js';
 import { determineTenureTitle } from '../data/tenure-titles.js';
 import { getScenarioById, ALL_SCENARIOS } from '../data/scenarios/index.js';
-import { store } from '../store/memory-store.js';
+import { getStore } from '../store/index.js';
 import type { RNG } from './random-params.js';
 import { defaultRNG } from './random-params.js';
 
-export function createSession(
+export async function createSession(
   playerName: string,
   strategy: Strategy,
   rng: RNG = defaultRNG,
-): GameSession {
+): Promise<GameSession> {
   const scenarioSequence = selectScenarios(rng);
 
   const session: GameSession = {
@@ -33,12 +33,12 @@ export function createSession(
     created_at: new Date(),
   };
 
-  store.createSession(session);
+  await getStore().createSession(session);
   return session;
 }
 
-export function getNextScenario(sessionId: string): PresentedScenario | null {
-  const session = store.getSession(sessionId);
+export async function getNextScenario(sessionId: string): Promise<PresentedScenario | null> {
+  const session = await getStore().getSession(sessionId);
   if (!session) throw new Error(`Session not found: ${sessionId}`);
   if (session.status !== 'in_progress') return null;
   if (session.current_scenario_index >= session.scenario_sequence.length) return null;
@@ -66,7 +66,7 @@ export function getNextScenario(sessionId: string): PresentedScenario | null {
       if (!prevRoundPlayed) {
         // Skip this conditional scenario
         session.current_scenario_index++;
-        store.updateSession(session);
+        await getStore().updateSession(session);
         return getNextScenario(sessionId);
       }
     }
@@ -105,13 +105,13 @@ export function getNextScenario(sessionId: string): PresentedScenario | null {
   return presented;
 }
 
-export function submitDecision(
+export async function submitDecision(
   sessionId: string,
   optionId: string,
   subChoiceId?: string,
   rng: RNG = defaultRNG,
-): DecisionResult {
-  const session = store.getSession(sessionId);
+): Promise<DecisionResult> {
+  const session = await getStore().getSession(sessionId);
   if (!session) throw new Error(`Session not found: ${sessionId}`);
   if (session.status !== 'in_progress') throw new Error('Game is not in progress');
 
@@ -243,7 +243,7 @@ export function submitDecision(
     finalizeSession(session);
   }
 
-  store.updateSession(session);
+  await getStore().updateSession(session);
 
   return {
     score_impacts: resolvedImpact,
@@ -320,8 +320,8 @@ function finalizeSession(session: GameSession): void {
   );
 }
 
-export function getReport(sessionId: string): GameReport | null {
-  const session = store.getSession(sessionId);
+export async function getReport(sessionId: string): Promise<GameReport | null> {
+  const session = await getStore().getSession(sessionId);
   if (!session) throw new Error(`Session not found: ${sessionId}`);
   if (session.status === 'in_progress') return null;
 

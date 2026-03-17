@@ -8,9 +8,9 @@ function seededRNG(seed: string) {
 }
 
 describe('Game Loop', () => {
-  it('creates a session with correct initial state', () => {
+  it('creates a session with correct initial state', async () => {
     const rng = seededRNG('test-seed-1');
-    const session = createSession('Test Player', 'pragmatist', rng);
+    const session = await createSession('Test Player', 'pragmatist', rng);
 
     expect(session.player_name).toBe('Test Player');
     expect(session.strategy).toBe('pragmatist');
@@ -21,10 +21,10 @@ describe('Game Loop', () => {
     expect(session.scenario_sequence.length).toBeGreaterThanOrEqual(3);
   });
 
-  it('presents the first scenario correctly', () => {
+  it('presents the first scenario correctly', async () => {
     const rng = seededRNG('test-seed-2');
-    const session = createSession('Test Player', 'builder', rng);
-    const scenario = getNextScenario(session.id);
+    const session = await createSession('Test Player', 'builder', rng);
+    const scenario = await getNextScenario(session.id);
 
     expect(scenario).not.toBeNull();
     expect(scenario!.id).toBeTruthy();
@@ -41,32 +41,32 @@ describe('Game Loop', () => {
     }
   });
 
-  it('submits a decision and updates scores', () => {
+  it('submits a decision and updates scores', async () => {
     const rng = seededRNG('test-seed-3');
-    const session = createSession('Test Player', 'pragmatist', rng);
-    const scenario = getNextScenario(session.id);
+    const session = await createSession('Test Player', 'pragmatist', rng);
+    const scenario = await getNextScenario(session.id);
 
     const firstOptionId = scenario!.options[0].id;
-    const result = submitDecision(session.id, firstOptionId);
+    const result = await submitDecision(session.id, firstOptionId);
 
     expect(result.narrative_snippet).toBeTruthy();
     expect(result.scores).toBeDefined();
     expect(result.is_game_over).toBe(false);
   });
 
-  it('plays through a full game (all first options)', () => {
+  it('plays through a full game (all first options)', async () => {
     const rng = seededRNG('full-game-seed');
-    const session = createSession('Full Game Player', 'pragmatist', rng);
+    const session = await createSession('Full Game Player', 'pragmatist', rng);
 
     let gameOver = false;
     let decisionCount = 0;
 
     while (!gameOver) {
-      const scenario = getNextScenario(session.id);
+      const scenario = await getNextScenario(session.id);
       if (!scenario) break;
 
       const firstOptionId = scenario.options[0].id;
-      const result = submitDecision(session.id, firstOptionId);
+      const result = await submitDecision(session.id, firstOptionId);
       decisionCount++;
       gameOver = result.is_game_over;
 
@@ -79,7 +79,7 @@ describe('Game Loop', () => {
     expect(decisionCount).toBeGreaterThanOrEqual(3);
 
     // Get report
-    const report = getReport(session.id);
+    const report = await getReport(session.id);
     expect(report).not.toBeNull();
     expect(report!.tenure_title).toBeTruthy();
     expect(report!.narrative).toBeTruthy();
@@ -87,37 +87,37 @@ describe('Game Loop', () => {
     expect(report!.decisions.length).toBe(decisionCount);
   });
 
-  it('plays a full game choosing last options (aggressive)', () => {
+  it('plays a full game choosing last options (aggressive)', async () => {
     const rng = seededRNG('aggressive-seed');
-    const session = createSession('Aggressive Player', 'disruptor', rng);
+    const session = await createSession('Aggressive Player', 'disruptor', rng);
 
     let gameOver = false;
     let decisionCount = 0;
 
     while (!gameOver) {
-      const scenario = getNextScenario(session.id);
+      const scenario = await getNextScenario(session.id);
       if (!scenario) break;
 
       const lastOptionId = scenario.options[scenario.options.length - 1].id;
-      const result = submitDecision(session.id, lastOptionId);
+      const result = await submitDecision(session.id, lastOptionId);
       decisionCount++;
       gameOver = result.is_game_over;
 
       if (decisionCount > 15) break;
     }
 
-    const report = getReport(session.id);
+    const report = await getReport(session.id);
     expect(report).not.toBeNull();
     // Aggressive play should likely result in either high P&L or insolvency/firing
     expect(['completed', 'fired', 'insolvent']).toContain(report!.status);
   });
 
-  it('compounding works: yield grab opt5 affects gilt meltdown', () => {
+  it('compounding works: yield grab opt5 affects gilt meltdown', async () => {
     const rng = seededRNG('compounding-test');
-    const session = createSession('Compounding Test', 'pragmatist', rng);
+    const session = await createSession('Compounding Test', 'pragmatist', rng);
 
     // Find and play through scenarios, choosing yield grab option 5
-    let scenario = getNextScenario(session.id);
+    let scenario = await getNextScenario(session.id);
     let decisionCount = 0;
 
     while (scenario && decisionCount < 15) {
@@ -131,41 +131,41 @@ describe('Game Loop', () => {
         optionId = scenario.options[0].id;
       }
 
-      const result = submitDecision(session.id, optionId);
+      const result = await submitDecision(session.id, optionId);
       decisionCount++;
 
       if (result.is_game_over) break;
-      scenario = getNextScenario(session.id);
+      scenario = await getNextScenario(session.id);
     }
 
     // The session should have compounding state set
-    const sess = getReport(session.id);
+    const sess = await getReport(session.id);
     // We just verify the game completed without errors
     expect(sess).not.toBeNull();
   });
 
-  it('returns null scenario when game is over', () => {
+  it('returns null scenario when game is over', async () => {
     const rng = seededRNG('game-over-test');
-    const session = createSession('Test', 'pragmatist', rng);
+    const session = await createSession('Test', 'pragmatist', rng);
 
     // Play until game over
     let gameOver = false;
     while (!gameOver) {
-      const scenario = getNextScenario(session.id);
+      const scenario = await getNextScenario(session.id);
       if (!scenario) break;
-      const result = submitDecision(session.id, scenario.options[0].id);
+      const result = await submitDecision(session.id, scenario.options[0].id);
       gameOver = result.is_game_over;
     }
 
     // Should return null now
-    const next = getNextScenario(session.id);
+    const next = await getNextScenario(session.id);
     expect(next).toBeNull();
   });
 
-  it('report is null for in-progress game', () => {
+  it('report is null for in-progress game', async () => {
     const rng = seededRNG('in-progress-test');
-    const session = createSession('Test', 'pragmatist', rng);
-    const report = getReport(session.id);
+    const session = await createSession('Test', 'pragmatist', rng);
+    const report = await getReport(session.id);
     expect(report).toBeNull();
   });
 });

@@ -18,15 +18,15 @@ interface SimResult {
   decisions: number;
 }
 
-function runSimulation(seed: string, strategy: Strategy): SimResult {
+async function runSimulation(seed: string, strategy: Strategy): Promise<SimResult> {
   const rng = seedrandom(seed);
-  const session = createSession(`Sim-${seed}`, strategy, () => rng());
+  const session = await createSession(`Sim-${seed}`, strategy, () => rng());
 
   let decisionCount = 0;
   let gameOver = false;
 
   while (!gameOver && decisionCount < 15) {
-    const scenario = getNextScenario(session.id);
+    const scenario = await getNextScenario(session.id);
     if (!scenario) break;
 
     // Random option selection (weighted slightly toward middle options for realism)
@@ -51,12 +51,12 @@ function runSimulation(seed: string, strategy: Strategy): SimResult {
       subChoiceId = option.sub_choices[Math.floor(rng() * option.sub_choices.length)].id;
     }
 
-    const result = submitDecision(session.id, option.id, subChoiceId, () => rng());
+    const result = await submitDecision(session.id, option.id, subChoiceId, () => rng());
     decisionCount++;
     gameOver = result.is_game_over;
   }
 
-  const report = getReport(session.id);
+  const report = await getReport(session.id);
 
   return {
     status: report?.status || 'unknown',
@@ -73,83 +73,90 @@ function runSimulation(seed: string, strategy: Strategy): SimResult {
 }
 
 // Run simulations
-console.log(`Running ${NUM_SIMULATIONS} simulations...\n`);
+async function main() {
+  console.log(`Running ${NUM_SIMULATIONS} simulations...\n`);
 
-const results: SimResult[] = [];
+  const results: SimResult[] = [];
 
-for (let i = 0; i < NUM_SIMULATIONS; i++) {
-  const strategy = STRATEGIES[i % STRATEGIES.length];
-  const result = runSimulation(`sim-${i}`, strategy);
-  results.push(result);
-}
-
-// Analyse results
-const statusCounts: Record<string, number> = {};
-const titleCounts: Record<string, number> = {};
-const strategyStatusCounts: Record<string, Record<string, number>> = {};
-const regulatoryCounts: Record<string, number> = {};
-
-for (const r of results) {
-  statusCounts[r.status] = (statusCounts[r.status] || 0) + 1;
-  titleCounts[r.tenure_title] = (titleCounts[r.tenure_title] || 0) + 1;
-  regulatoryCounts[r.regulatory] = (regulatoryCounts[r.regulatory] || 0) + 1;
-
-  if (!strategyStatusCounts[r.strategy]) strategyStatusCounts[r.strategy] = {};
-  strategyStatusCounts[r.strategy][r.status] = (strategyStatusCounts[r.strategy][r.status] || 0) + 1;
-}
-
-console.log('=== OUTCOME DISTRIBUTION ===');
-for (const [status, count] of Object.entries(statusCounts).sort((a, b) => b[1] - a[1])) {
-  console.log(`  ${status}: ${count} (${((count / NUM_SIMULATIONS) * 100).toFixed(1)}%)`);
-}
-
-console.log('\n=== TARGET vs ACTUAL ===');
-const insolventPct = ((statusCounts['insolvent'] || 0) / NUM_SIMULATIONS * 100).toFixed(1);
-const firedPct = ((statusCounts['fired'] || 0) / NUM_SIMULATIONS * 100).toFixed(1);
-const finedPct = (((regulatoryCounts['amber'] || 0) + (regulatoryCounts['red'] || 0)) / NUM_SIMULATIONS * 100).toFixed(1);
-const cleanPct = ((statusCounts['completed'] || 0) / NUM_SIMULATIONS * 100).toFixed(1);
-console.log(`  Insolvent: ${insolventPct}% (target: ~10%)`);
-console.log(`  Fired: ${firedPct}% (target: ~15%)`);
-console.log(`  Fined (amber+red): ${finedPct}% (target: ~50%+)`);
-console.log(`  Completed clean: ${cleanPct}%`);
-
-console.log('\n=== REGULATORY STANDING ===');
-for (const [level, count] of Object.entries(regulatoryCounts).sort((a, b) => b[1] - a[1])) {
-  console.log(`  ${level}: ${count} (${((count / NUM_SIMULATIONS) * 100).toFixed(1)}%)`);
-}
-
-console.log('\n=== BY STRATEGY ===');
-for (const strategy of STRATEGIES) {
-  const counts = strategyStatusCounts[strategy] || {};
-  const total = Object.values(counts).reduce((a, b) => a + b, 0);
-  console.log(`  ${strategy}:`);
-  for (const [status, count] of Object.entries(counts).sort((a, b) => b[1] - a[1])) {
-    console.log(`    ${status}: ${count} (${((count / total) * 100).toFixed(1)}%)`);
+  for (let i = 0; i < NUM_SIMULATIONS; i++) {
+    const strategy = STRATEGIES[i % STRATEGIES.length];
+    const result = await runSimulation(`sim-${i}`, strategy);
+    results.push(result);
   }
+
+  // Analyse results
+  const statusCounts: Record<string, number> = {};
+  const titleCounts: Record<string, number> = {};
+  const strategyStatusCounts: Record<string, Record<string, number>> = {};
+  const regulatoryCounts: Record<string, number> = {};
+
+  for (const r of results) {
+    statusCounts[r.status] = (statusCounts[r.status] || 0) + 1;
+    titleCounts[r.tenure_title] = (titleCounts[r.tenure_title] || 0) + 1;
+    regulatoryCounts[r.regulatory] = (regulatoryCounts[r.regulatory] || 0) + 1;
+
+    if (!strategyStatusCounts[r.strategy]) strategyStatusCounts[r.strategy] = {};
+    strategyStatusCounts[r.strategy][r.status] = (strategyStatusCounts[r.strategy][r.status] || 0) + 1;
+  }
+
+  console.log('=== OUTCOME DISTRIBUTION ===');
+  for (const [status, count] of Object.entries(statusCounts).sort((a, b) => b[1] - a[1])) {
+    console.log(`  ${status}: ${count} (${((count / NUM_SIMULATIONS) * 100).toFixed(1)}%)`);
+  }
+
+  console.log('\n=== TARGET vs ACTUAL ===');
+  const insolventPct = ((statusCounts['insolvent'] || 0) / NUM_SIMULATIONS * 100).toFixed(1);
+  const firedPct = ((statusCounts['fired'] || 0) / NUM_SIMULATIONS * 100).toFixed(1);
+  const finedPct = (((regulatoryCounts['amber'] || 0) + (regulatoryCounts['red'] || 0)) / NUM_SIMULATIONS * 100).toFixed(1);
+  const cleanPct = ((statusCounts['completed'] || 0) / NUM_SIMULATIONS * 100).toFixed(1);
+  console.log(`  Insolvent: ${insolventPct}% (target: ~10%)`);
+  console.log(`  Fired: ${firedPct}% (target: ~15%)`);
+  console.log(`  Fined (amber+red): ${finedPct}% (target: ~50%+)`);
+  console.log(`  Completed clean: ${cleanPct}%`);
+
+  console.log('\n=== REGULATORY STANDING ===');
+  for (const [level, count] of Object.entries(regulatoryCounts).sort((a, b) => b[1] - a[1])) {
+    console.log(`  ${level}: ${count} (${((count / NUM_SIMULATIONS) * 100).toFixed(1)}%)`);
+  }
+
+  console.log('\n=== BY STRATEGY ===');
+  for (const strategy of STRATEGIES) {
+    const counts = strategyStatusCounts[strategy] || {};
+    const total = Object.values(counts).reduce((a, b) => a + b, 0);
+    console.log(`  ${strategy}:`);
+    for (const [status, count] of Object.entries(counts).sort((a, b) => b[1] - a[1])) {
+      console.log(`    ${status}: ${count} (${((count / total) * 100).toFixed(1)}%)`);
+    }
+  }
+
+  console.log('\n=== TENURE TITLES ===');
+  for (const [title, count] of Object.entries(titleCounts).sort((a, b) => b[1] - a[1])) {
+    console.log(`  "${title}": ${count} (${((count / NUM_SIMULATIONS) * 100).toFixed(1)}%)`);
+  }
+
+  // Score distributions
+  const completedResults = results.filter(r => r.status === 'completed');
+  if (completedResults.length > 0) {
+    const avgSolvency = completedResults.reduce((a, b) => a + b.solvency, 0) / completedResults.length;
+    const avgPnl = completedResults.reduce((a, b) => a + b.pnl, 0) / completedResults.length;
+    const avgReputation = completedResults.reduce((a, b) => a + b.reputation, 0) / completedResults.length;
+    const avgBoardConf = completedResults.reduce((a, b) => a + b.board_confidence, 0) / completedResults.length;
+
+    const profitableCount = completedResults.filter(r => r.pnl > 0).length;
+    const profitablePct = ((profitableCount / completedResults.length) * 100).toFixed(1);
+
+    console.log('\n=== AVERAGE SCORES (completed games only) ===');
+    console.log(`  Solvency: ${avgSolvency.toFixed(1)}%`);
+    console.log(`  P&L: £${avgPnl.toFixed(1)}m`);
+    console.log(`  Profitable: ${profitableCount}/${completedResults.length} (${profitablePct}%)`);
+    console.log(`  Reputation: ${avgReputation.toFixed(1)}/100`);
+    console.log(`  Board Confidence: ${avgBoardConf.toFixed(1)}/100`);
+  }
+
+  console.log(`\nTotal simulations: ${NUM_SIMULATIONS}`);
 }
 
-console.log('\n=== TENURE TITLES ===');
-for (const [title, count] of Object.entries(titleCounts).sort((a, b) => b[1] - a[1])) {
-  console.log(`  "${title}": ${count} (${((count / NUM_SIMULATIONS) * 100).toFixed(1)}%)`);
-}
-
-// Score distributions
-const completedResults = results.filter(r => r.status === 'completed');
-if (completedResults.length > 0) {
-  const avgSolvency = completedResults.reduce((a, b) => a + b.solvency, 0) / completedResults.length;
-  const avgPnl = completedResults.reduce((a, b) => a + b.pnl, 0) / completedResults.length;
-  const avgReputation = completedResults.reduce((a, b) => a + b.reputation, 0) / completedResults.length;
-  const avgBoardConf = completedResults.reduce((a, b) => a + b.board_confidence, 0) / completedResults.length;
-
-  const profitableCount = completedResults.filter(r => r.pnl > 0).length;
-  const profitablePct = ((profitableCount / completedResults.length) * 100).toFixed(1);
-
-  console.log('\n=== AVERAGE SCORES (completed games only) ===');
-  console.log(`  Solvency: ${avgSolvency.toFixed(1)}%`);
-  console.log(`  P&L: £${avgPnl.toFixed(1)}m`);
-  console.log(`  Profitable: ${profitableCount}/${completedResults.length} (${profitablePct}%)`);
-  console.log(`  Reputation: ${avgReputation.toFixed(1)}/100`);
-  console.log(`  Board Confidence: ${avgBoardConf.toFixed(1)}/100`);
-}
-
-console.log(`\nTotal simulations: ${NUM_SIMULATIONS}`);
+main().catch(err => {
+  console.error('Simulation failed:', err);
+  process.exit(1);
+});
