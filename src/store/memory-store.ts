@@ -57,4 +57,10 @@ export class MemoryStore implements GameStore {
       .sort((a, b) => b.composite_score - a.composite_score)
       .slice(0, limit);
   }
+
+  async deleteAll(): Promise<number> {
+    const count = this.sessions.size;
+    this.sessions.clear();
+    return count;
+  }
 }

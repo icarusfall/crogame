@@ -19,4 +19,5 @@ export interface GameStore {
   getAllCompleted(): Promise<GameSession[]>;
   getAll(): Promise<GameSession[]>;
   getLeaderboard(limit?: number): Promise<LeaderboardEntry[]>;
+  deleteAll(): Promise<number>;
 }

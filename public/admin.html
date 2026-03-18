@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Be the CRO | Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-deep: #0a0e17;
+      --bg-card: #131925;
+      --border: #2a3348;
+      --text-primary: #e8e6e1;
+      --text-secondary: #9ca3af;
+      --text-muted: #6b7280;
+      --accent-gold: #c9a84c;
+      --accent-red: #c94a4a;
+      --accent-green: #4ac96a;
+      --font-serif: 'Playfair Display', Georgia, serif;
+      --font-sans: 'Source Sans 3', -apple-system, sans-serif;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      min-height: 100vh;
+      background: var(--bg-deep);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .admin-panel {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 3rem;
+      max-width: 480px;
+      width: 90%;
+      text-align: center;
+    }
+
+    .admin-panel h1 {
+      font-family: var(--font-serif);
+      color: var(--accent-gold);
+      margin-bottom: 0.5rem;
+      font-size: 1.8rem;
+    }
+
+    .admin-panel .subtitle {
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+      font-size: 0.9rem;
+    }
+
+    .stats-row {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .stats-row .stat {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .stats-row .stat-value {
+      font-size: 2.2rem;
+      font-weight: 600;
+      color: var(--accent-gold);
+    }
+
+    .stats-row .stat-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .btn-danger {
+      background: var(--accent-red);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 1rem 2.5rem;
+      font-size: 1rem;
+      font-weight: 600;
+      font-family: var(--font-sans);
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-bottom: 1rem;
+    }
+
+    .btn-danger:hover {
+      background: #d95555;
+      transform: translateY(-1px);
+    }
+
+    .btn-danger:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .status-msg {
+      font-size: 0.9rem;
+      min-height: 1.5em;
+      margin-top: 0.5rem;
+    }
+
+    .status-msg.success { color: var(--accent-green); }
+    .status-msg.error { color: var(--accent-red); }
+    .status-msg.info { color: var(--text-muted); }
+
+    .nav-links {
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .nav-links a {
+      color: var(--accent-gold);
+      text-decoration: none;
+      font-size: 0.85rem;
+      margin: 0 0.8rem;
+    }
+
+    .nav-links a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="admin-panel">
+    <h1>Admin Panel</h1>
+    <p class="subtitle">Be the CRO &mdash; Steadfast Group</p>
+
+    <div class="stats-row">
+      <div class="stat">
+        <span class="stat-value" id="stat-total">-</span>
+        <span class="stat-label">Total Sessions</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value" id="stat-completed">-</span>
+        <span class="stat-label">Completed</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value" id="stat-live">-</span>
+        <span class="stat-label">In Progress</span>
+      </div>
+    </div>
+
+    <button class="btn-danger" id="btn-reset">Clear All Game Data</button>
+    <div class="status-msg info" id="status-msg">Ready</div>
+
+    <div class="nav-links">
+      <a href="/">Game</a>
+      <a href="/stats.html">Dashboard</a>
+    </div>
+  </div>
+
+  <script>
+    const API = '';
+
+    async function loadStats() {
+      try {
+        const res = await fetch(`${API}/api/leaderboard/stats`);
+        const stats = await res.json();
+        document.getElementById('stat-total').textContent = stats.total_sessions;
+        document.getElementById('stat-completed').textContent = stats.completed_sessions;
+        document.getElementById('stat-live').textContent = stats.in_progress;
+      } catch (err) {
+        console.error('Failed to load stats:', err);
+      }
+    }
+
+    document.getElementById('btn-reset').addEventListener('click', async () => {
+      const answer = prompt('Type RESET to confirm clearing all game data:');
+      if (answer !== 'RESET') {
+        document.getElementById('status-msg').textContent = 'Reset cancelled';
+        document.getElementById('status-msg').className = 'status-msg info';
+        return;
+      }
+
+      const btn = document.getElementById('btn-reset');
+      const msg = document.getElementById('status-msg');
+      btn.disabled = true;
+      msg.textContent = 'Clearing...';
+      msg.className = 'status-msg info';
+
+      try {
+        const res = await fetch(`${API}/api/admin/reset`, {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ confirm: 'RESET_ALL_DATA' }),
+        });
+        const data = await res.json();
+
+        if (!res.ok) throw new Error(data.error || 'Failed to reset');
+
+        msg.textContent = `Cleared ${data.deleted_count} session(s)`;
+        msg.className = 'status-msg success';
+        loadStats();
+      } catch (err) {
+        msg.textContent = 'Error: ' + err.message;
+        msg.className = 'status-msg error';
+      } finally {
+        btn.disabled = false;
+      }
+    });
+
+    loadStats();
+  </script>
+</body>
+</html>

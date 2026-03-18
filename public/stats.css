@@ -1,0 +1,227 @@
+/* === DASHBOARD STYLES === */
+/* Reuses CSS variable palette from main game */
+
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg-deep: #0a0e17;
+  --bg-card: #131925;
+  --bg-card-hover: #1a2235;
+  --bg-elevated: #1c2333;
+  --border: #2a3348;
+  --border-light: #3a4565;
+  --text-primary: #e8e6e1;
+  --text-secondary: #9ca3af;
+  --text-muted: #6b7280;
+  --accent-gold: #c9a84c;
+  --accent-gold-dim: #8b7632;
+  --accent-blue: #4a8ec9;
+  --accent-red: #c94a4a;
+  --accent-green: #4ac96a;
+  --accent-amber: #c9974a;
+  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-sans: 'Source Sans 3', -apple-system, sans-serif;
+}
+
+html, body {
+  height: 100%;
+  background: var(--bg-deep);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+}
+
+/* === HEADER === */
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border);
+}
+
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.logo-mark {
+  width: 48px;
+  height: 48px;
+  background: var(--accent-gold);
+  color: var(--bg-deep);
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-size: 1.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+}
+
+.dashboard-header h1 {
+  font-family: var(--font-serif);
+  font-size: 1.6rem;
+  color: var(--accent-gold);
+}
+
+.header-sub {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.header-stats {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.stat-pill {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.5rem 1.5rem;
+  min-width: 90px;
+}
+
+.stat-number {
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--accent-gold);
+  line-height: 1.2;
+}
+
+.stat-pill .stat-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* === GRID === */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1rem;
+  padding: 1rem 2rem;
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+}
+
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.2rem;
+}
+
+.card h2 {
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  color: var(--accent-gold);
+  margin-bottom: 0.8rem;
+}
+
+/* Card spans */
+.card-choices {
+  grid-column: 1 / -1;
+}
+
+.card-leaderboard {
+  grid-column: 1 / -1;
+}
+
+/* === CHARTS === */
+.chart-container {
+  position: relative;
+  width: 100%;
+}
+
+.chart-doughnut {
+  max-height: 260px;
+  display: flex;
+  justify-content: center;
+}
+
+.chart-doughnut canvas {
+  max-height: 240px;
+}
+
+.chart-bar {
+  height: 240px;
+}
+
+.chart-choices {
+  height: 300px;
+}
+
+/* === LEADERBOARD TABLE === */
+.lb-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.lb-table thead th {
+  text-align: left;
+  padding: 0.5rem 0.8rem;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+}
+
+.lb-table tbody td {
+  padding: 0.5rem 0.8rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-secondary);
+}
+
+.lb-table tbody tr:nth-child(-n+3) td:first-child {
+  color: var(--accent-gold);
+  font-weight: 700;
+}
+
+.lb-table .player-name {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.lb-table .score-cell {
+  color: var(--accent-gold);
+  font-weight: 600;
+}
+
+.empty-state {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 1.5rem !important;
+}
+
+/* === FOOTER === */
+.dashboard-footer {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 2rem;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 900px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+  .dashboard-header {
+    flex-direction: column;
+    gap: 1rem;
+  }
+}

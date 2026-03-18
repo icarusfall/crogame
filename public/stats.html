@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Be the CRO | Live Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="stats.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+</head>
+<body>
+
+  <header class="dashboard-header">
+    <div class="header-brand">
+      <span class="logo-mark">S</span>
+      <div>
+        <h1>Be the CRO</h1>
+        <p class="header-sub">Live Dashboard &mdash; Steadfast Group</p>
+      </div>
+    </div>
+    <div class="header-stats">
+      <div class="stat-pill">
+        <span class="stat-number" id="stat-total">0</span>
+        <span class="stat-label">Players</span>
+      </div>
+      <div class="stat-pill">
+        <span class="stat-number" id="stat-completed">0</span>
+        <span class="stat-label">Completed</span>
+      </div>
+      <div class="stat-pill">
+        <span class="stat-number" id="stat-live">0</span>
+        <span class="stat-label">Playing Now</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="dashboard-grid">
+
+    <!-- Row 1: Outcomes & Strategies -->
+    <section class="card card-outcomes">
+      <h2>Outcomes</h2>
+      <div class="chart-container chart-doughnut">
+        <canvas id="chart-outcomes"></canvas>
+      </div>
+    </section>
+
+    <section class="card card-strategies">
+      <h2>Strategy Choices</h2>
+      <div class="chart-container chart-doughnut">
+        <canvas id="chart-strategies"></canvas>
+      </div>
+    </section>
+
+    <section class="card card-avg-scores">
+      <h2>Avg Scores by Strategy</h2>
+      <div class="chart-container chart-bar">
+        <canvas id="chart-avg-scores"></canvas>
+      </div>
+    </section>
+
+    <!-- Row 2: Choice distributions -->
+    <section class="card card-choices">
+      <h2>What Did CROs Choose?</h2>
+      <div class="chart-container chart-choices">
+        <canvas id="chart-choices"></canvas>
+      </div>
+    </section>
+
+    <!-- Row 3: Leaderboard -->
+    <section class="card card-leaderboard">
+      <h2>Leaderboard</h2>
+      <table class="lb-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Player</th>
+            <th>Strategy</th>
+            <th>Title</th>
+            <th>Score</th>
+          </tr>
+        </thead>
+        <tbody id="lb-body">
+          <tr><td colspan="5" class="empty-state">No completed games yet</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+  </main>
+
+  <footer class="dashboard-footer">
+    <span>Auto-refreshes every 10 seconds</span>
+    <span id="last-updated"></span>
+  </footer>
+
+  <script src="stats.js"></script>
+</body>
+</html>

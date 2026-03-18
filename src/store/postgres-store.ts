@@ -150,6 +150,11 @@ export class PostgresStore implements GameStore {
     }));
   }
 
+  async deleteAll(): Promise<number> {
+    const result = await this.pool.query('DELETE FROM game_sessions');
+    return result.rowCount ?? 0;
+  }
+
   private rowToSession(row: any): GameSession {
     const session = {
       id: row.id,
