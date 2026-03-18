@@ -43,6 +43,7 @@ export interface GameSession {
 export interface DecisionResult {
   score_impacts: ScoreImpact;
   narrative_snippet: string;
+  interstitial_narrative?: string;
   random_outcome?: Record<string, number | boolean | string>;
   is_game_over: boolean;
   game_over_reason?: 'completed' | 'fired' | 'insolvent';

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Be the CRO | Steadfast Group</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- WELCOME SCREEN -->
+  <div id="screen-welcome" class="screen active">
+    <div class="welcome-container">
+      <div class="welcome-header">
+        <div class="logo-mark">S</div>
+        <h1>Be the CRO</h1>
+        <p class="subtitle">Steadfast Group plc</p>
+        <p class="tagline">Five years. Ten decisions. One reputation.</p>
+      </div>
+
+      <div class="welcome-form">
+        <div class="form-group">
+          <label for="player-name">Your Name</label>
+          <input type="text" id="player-name" placeholder="Enter your name" maxlength="40" autocomplete="off">
+        </div>
+
+        <div class="form-group">
+          <label>Choose Your Strategy</label>
+          <div class="strategy-grid">
+            <button class="strategy-card" data-strategy="guardian">
+              <span class="strategy-icon">&#x1f6e1;</span>
+              <span class="strategy-name">The Guardian</span>
+              <span class="strategy-desc">Conservative. Prioritise solvency and regulatory standing above growth.</span>
+            </button>
+            <button class="strategy-card" data-strategy="pragmatist">
+              <span class="strategy-icon">&#x2696;</span>
+              <span class="strategy-name">The Pragmatist</span>
+              <span class="strategy-desc">Balanced. Case-by-case judgment, no strong prior commitment.</span>
+            </button>
+            <button class="strategy-card" data-strategy="builder">
+              <span class="strategy-icon">&#x1f4c8;</span>
+              <span class="strategy-name">The Builder</span>
+              <span class="strategy-desc">Growth-oriented. Accept higher risk for franchise expansion.</span>
+            </button>
+            <button class="strategy-card" data-strategy="disruptor">
+              <span class="strategy-icon">&#x26a1;</span>
+              <span class="strategy-name">The Disruptor</span>
+              <span class="strategy-desc">Aggressive. The firm needs bold moves to survive.</span>
+            </button>
+          </div>
+        </div>
+
+        <button id="btn-start" class="btn-primary" disabled>Begin Your Tenure</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCENARIO SCREEN -->
+  <div id="screen-scenario" class="screen">
+    <div class="scenario-container">
+      <header class="game-header">
+        <div class="header-left">
+          <span class="year-badge" id="scenario-year">Year 1</span>
+          <span class="decision-counter" id="decision-counter">Decision 1 of 10</span>
+        </div>
+        <div class="header-right">
+          <button class="btn-scores-toggle" id="btn-toggle-scores">Scores</button>
+        </div>
+      </header>
+
+      <!-- Score Dashboard (collapsible) -->
+      <div id="score-dashboard" class="score-dashboard collapsed">
+        <div class="score-item">
+          <span class="score-label">Solvency</span>
+          <span class="score-value" id="score-solvency">150%</span>
+        </div>
+        <div class="score-item">
+          <span class="score-label">P&amp;L</span>
+          <span class="score-value" id="score-pnl">&pound;0m</span>
+        </div>
+        <div class="score-item">
+          <span class="score-label">Regulatory</span>
+          <span class="score-value" id="score-regulatory">
+            <span class="reg-dot green"></span> Green
+          </span>
+        </div>
+        <div class="score-item">
+          <span class="score-label">Reputation</span>
+          <span class="score-value" id="score-reputation">75</span>
+        </div>
+        <div class="score-item">
+          <span class="score-label">Board</span>
+          <span class="score-value" id="score-board">70</span>
+        </div>
+      </div>
+
+      <div class="scenario-content">
+        <h2 class="scenario-title" id="scenario-title"></h2>
+        <div class="scenario-meta">
+          <span class="meta-category" id="scenario-category"></span>
+          <span class="meta-division" id="scenario-division"></span>
+        </div>
+        <div class="scenario-text" id="scenario-text"></div>
+      </div>
+
+      <div class="options-container" id="options-container"></div>
+
+      <!-- Sub-choice overlay -->
+      <div id="subchoice-overlay" class="subchoice-overlay hidden">
+        <div class="subchoice-panel">
+          <h3 id="subchoice-title"></h3>
+          <div id="subchoice-options"></div>
+          <button class="btn-back" id="btn-subchoice-back">Back</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OUTCOME SCREEN -->
+  <div id="screen-outcome" class="screen">
+    <div class="outcome-container">
+      <header class="game-header">
+        <div class="header-left">
+          <span class="year-badge" id="outcome-year">Year 1</span>
+        </div>
+      </header>
+
+      <div class="outcome-content">
+        <h2 class="outcome-heading">The Consequences</h2>
+        <div class="outcome-narrative" id="outcome-narrative"></div>
+
+        <!-- Interstitial narrative -->
+        <div class="interstitial-narrative hidden" id="interstitial-section">
+          <div class="interstitial-divider"></div>
+          <div class="interstitial-text" id="interstitial-text"></div>
+        </div>
+
+        <div class="score-changes" id="score-changes"></div>
+      </div>
+
+      <button class="btn-primary" id="btn-continue">Continue</button>
+    </div>
+  </div>
+
+  <!-- GAME OVER SCREEN -->
+  <div id="screen-gameover" class="screen">
+    <div class="gameover-container">
+      <div class="gameover-reason" id="gameover-reason"></div>
+      <h2 class="gameover-title" id="gameover-title"></h2>
+      <div class="gameover-narrative" id="gameover-narrative"></div>
+      <button class="btn-primary" id="btn-view-report">View Your Report</button>
+    </div>
+  </div>
+
+  <!-- REPORT SCREEN -->
+  <div id="screen-report" class="screen">
+    <div class="report-container">
+      <div class="report-header">
+        <p class="report-label">Your Tenure Title</p>
+        <h1 class="report-title" id="report-title"></h1>
+        <p class="report-player" id="report-player"></p>
+        <p class="report-strategy" id="report-strategy"></p>
+      </div>
+
+      <div class="report-scores" id="report-scores"></div>
+
+      <div class="report-narrative">
+        <h3>Your Story</h3>
+        <div id="report-narrative-text"></div>
+      </div>
+
+      <div class="report-actions">
+        <button class="btn-primary" id="btn-leaderboard">View Leaderboard</button>
+        <button class="btn-secondary" id="btn-play-again">Play Again</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- LEADERBOARD SCREEN -->
+  <div id="screen-leaderboard" class="screen">
+    <div class="leaderboard-container">
+      <h2>Leaderboard</h2>
+      <div class="leaderboard-stats" id="leaderboard-stats"></div>
+      <table class="leaderboard-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Player</th>
+            <th>Strategy</th>
+            <th>Title</th>
+            <th>Score</th>
+          </tr>
+        </thead>
+        <tbody id="leaderboard-body"></tbody>
+      </table>
+      <button class="btn-secondary" id="btn-back-to-welcome">Play Again</button>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>

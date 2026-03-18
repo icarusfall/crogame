@@ -4,6 +4,7 @@ dist/
 *.js.map
 *.d.ts
 !vitest.config.ts
+!public/**
 .env
 .env.*
 !.env.example

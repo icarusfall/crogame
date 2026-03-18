@@ -203,6 +203,7 @@ export async function submitDecision(
   // Represents normal business operations between crisis decisions
   const currentYear = scheduled.year;
   const nextScheduled = session.scenario_sequence[session.current_scenario_index];
+  let interstitialNarrative: string | undefined;
   if (nextScheduled && nextScheduled.year > currentYear) {
     const yearGap = nextScheduled.year - currentYear;
     const interstitialResult = applyInterstitialBonus(updatedScores, yearGap, rng);
@@ -210,6 +211,7 @@ export async function submitDecision(
     Object.assign(updatedScores, interstitialResult.scores);
     if (interstitialResult.narrative) {
       session.narrative_parts.push(interstitialResult.narrative);
+      interstitialNarrative = interstitialResult.narrative;
     }
   }
 
@@ -233,6 +235,7 @@ export async function submitDecision(
       Object.assign(updatedScores, finalResult.scores);
       if (finalResult.narrative) {
         session.narrative_parts.push(finalResult.narrative);
+        interstitialNarrative = (interstitialNarrative ? interstitialNarrative + '\n\n' : '') + finalResult.narrative;
       }
     }
 
@@ -248,6 +251,7 @@ export async function submitDecision(
   return {
     score_impacts: resolvedImpact,
     narrative_snippet: narrativeSnippet,
+    interstitial_narrative: interstitialNarrative,
     random_outcome: Object.keys(scheduled.rolled_params).length > 0 ? scheduled.rolled_params : undefined,
     is_game_over: isGameOver,
     game_over_reason: gameOverReason,
