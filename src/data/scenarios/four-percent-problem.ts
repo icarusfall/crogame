@@ -7,7 +7,7 @@ export const fourPercentRound1: Scenario = {
   division: 'SW',
   year_range: [2, 3],
   is_tentpole: true,
-  illustration_key: 'scene_ops_team',
+  illustration_key: 'four_percent',
   setup_text:
     "A consultant from Mercer has emailed your Head of Retail Operations. Politely but firmly, " +
     "she's pointing out that the unit allocation on a large DC scheme doesn't match her own calculations.\n\n" +
@@ -201,7 +201,7 @@ export const fourPercentRound2: Scenario = {
   division: 'SW',
   year_range: [3, 4],
   is_tentpole: false,
-  illustration_key: 'scene_ops_team',
+  illustration_key: 'four_percent',
   setup_text:
     "The reconciliation reveals the true scale: {total_misallocation} across " +
     "{policies_affected} policies. Some customers have been overpaid, some underpaid. " +
@@ -403,7 +403,7 @@ export const fourPercentRound3: Scenario = {
   division: 'SW',
   year_range: [4, 5],
   is_tentpole: false,
-  illustration_key: 'scene_ops_team',
+  illustration_key: 'four_percent',
   setup_text:
     "Your Head of Operations has just walked into your office and closed the door.\n\n" +
     "'There was a bug in the reconciliation spreadsheet. Some of the correction amounts were wrong. " +

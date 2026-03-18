@@ -7,7 +7,7 @@ export const giltMeltdown: Scenario = {
   division: 'SAM',
   year_range: [3, 4],
   is_tentpole: true,
-  illustration_key: 'scene_trading_floor',
+  illustration_key: 'gilt_meltdown',
   setup_text:
     "Breaking news: The Chancellor has addressed a packed House of Commons with a bold new fiscal strategy. " +
     "'We borrow a truly enormous amount of money,' she explains to stunned MPs. 'The only thing I ask is that nobody mentions it.' " +

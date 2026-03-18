@@ -7,7 +7,7 @@ export const ctoSystems: Scenario = {
   division: 'group',
   year_range: [1, 2],
   is_tentpole: true,
-  illustration_key: 'scene_boardroom',
+  illustration_key: 'cto_systems',
   setup_text:
     "The new CTO has been in the building for six weeks. He has spent most of that time in the server room, " +
     "emerging periodically to shake his head and request meetings with people who would rather not have them.\n\n" +

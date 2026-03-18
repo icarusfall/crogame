@@ -7,7 +7,7 @@ export const headcountPressure: Scenario = {
   division: 'group',
   year_range: [2, 4],
   is_tentpole: false,
-  illustration_key: 'scene_boardroom',
+  illustration_key: 'headcount_pressure',
   setup_text:
     "The group CEO has sent an email to all executive committee members. The subject line is " +
     "'Operational Efficiency Programme.' This is how CEOs say 'redundancies.'\n\n" +

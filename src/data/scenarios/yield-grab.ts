@@ -7,7 +7,7 @@ export const yieldGrab: Scenario = {
   division: 'SAM',
   year_range: [1, 2],
   is_tentpole: true,
-  illustration_key: 'scene_boardroom',
+  illustration_key: 'yield_grab',
   setup_text:
     "The CFO has called an unscheduled meeting. He's brought slides. This is never good.\n\n" +
     "'Sphinx Insurance,' he begins, tapping a chart showing their back-book returns, " +

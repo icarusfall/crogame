@@ -7,7 +7,7 @@ export const ftJournalist: Scenario = {
   division: 'group',
   year_range: [2, 4],
   is_tentpole: false,
-  illustration_key: 'scene_boardroom',
+  illustration_key: 'ft_journalist',
   setup_text:
     "Your Head of Communications has forwarded an email with a single-word subject line: 'Trouble.'\n\n" +
     "The email is from a Financial Times journalist called Sarah Chen. She's been on the insurance beat " +

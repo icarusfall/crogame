@@ -7,7 +7,7 @@ export const whistleblower: Scenario = {
   division: 'group',
   year_range: [3, 5],
   is_tentpole: false,
-  illustration_key: 'scene_boardroom',
+  illustration_key: 'whistleblower',
   setup_text:
     "The company secretary appears at your door with an expression that sits somewhere between " +
     "concern and dread. She is holding a letter — not an email, an actual letter, printed on paper, " +

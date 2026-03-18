@@ -125,6 +125,13 @@ function renderScenario() {
   document.getElementById('scenario-division').textContent = s.division;
   document.getElementById('scenario-text').textContent = s.setup_text;
 
+  // Set illustration
+  const img = document.getElementById('scenario-image');
+  img.classList.remove('loaded');
+  img.src = `/images/${s.illustration_key}.webp`;
+  img.alt = s.title;
+  img.onload = () => img.classList.add('loaded');
+
   updateScores(scores);
 
   // Render options

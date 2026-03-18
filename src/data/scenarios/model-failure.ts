@@ -7,7 +7,7 @@ export const modelFailure: Scenario = {
   division: 'SIR',
   year_range: [3, 5],
   is_tentpole: false,
-  illustration_key: 'scene_actuary_office',
+  illustration_key: 'model_failure',
   setup_text:
     "The Chief Actuary knocks on your door at 4:47pm on a Friday. Nobody delivers good news " +
     "at 4:47pm on a Friday.\n\n" +

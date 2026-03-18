@@ -7,7 +7,7 @@ export const bulkAnnuityPricing: Scenario = {
   division: 'SIR',
   year_range: [1, 3],
   is_tentpole: true,
-  illustration_key: 'scene_boardroom',
+  illustration_key: 'bulk_annuity',
   setup_text:
     "The Head of Institutional Retirement has asked for thirty minutes. She needs sixty, but knows " +
     "better than to say so.\n\n" +

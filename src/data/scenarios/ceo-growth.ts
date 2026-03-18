@@ -7,7 +7,7 @@ export const ceoGrowthTargets: Scenario = {
   division: 'SIR',
   year_range: [1, 3],
   is_tentpole: false,
-  illustration_key: 'scene_boardroom',
+  illustration_key: 'ceo_growth',
   setup_text:
     "Caroline Westbrook, CEO, has called you to her office. She is standing behind her desk, " +
     "which means she has already made a decision and is about to tell you what it is.\n\n" +

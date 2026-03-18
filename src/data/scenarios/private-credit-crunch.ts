@@ -7,7 +7,7 @@ export const privateCreditCrunch: Scenario = {
   division: 'SAM',
   year_range: [2, 4],
   is_tentpole: false,
-  illustration_key: 'scene_trading_floor',
+  illustration_key: 'private_credit',
   setup_text:
     "It starts with a mid-tier US private equity firm. They miss a covenant on a £400m infrastructure " +
     "loan. Nobody panics. These things happen.\n\n" +

@@ -335,6 +335,24 @@ html, body {
 .reg-dot.amber { background: var(--accent-amber); }
 .reg-dot.red { background: var(--accent-red); }
 
+/* === SCENARIO ILLUSTRATION === */
+.scenario-illustration {
+  margin: 0 -24px 24px;
+  overflow: hidden;
+}
+
+.scenario-illustration img {
+  width: 100%;
+  height: auto;
+  display: block;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+.scenario-illustration img.loaded {
+  opacity: 1;
+}
+
 /* === SCENARIO CONTENT === */
 .scenario-container {
   max-width: 720px;

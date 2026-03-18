@@ -7,7 +7,7 @@ export const regulatorReview: Scenario = {
   division: 'group',
   year_range: [4, 5],
   is_tentpole: true,
-  illustration_key: 'scene_pra_office',
+  illustration_key: 'regulator_review',
   setup_text:
     "The letter arrives on a Tuesday morning, which is when bad news always arrives. " +
     "It is from the Prudential Regulation Authority. It is polite in the way that letters " +

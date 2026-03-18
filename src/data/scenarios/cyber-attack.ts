@@ -7,7 +7,7 @@ export const cyberAttack: Scenario = {
   division: 'group',
   year_range: [2, 4],
   is_tentpole: false,
-  illustration_key: 'scene_ops_team',
+  illustration_key: 'cyber_attack',
   setup_text:
     "Duncan MacLeod, Head of IT Security, is not a man who panics. He has worked in cybersecurity " +
     "for twenty years. He has seen nation-state attacks, ransomware, and a CEO who once clicked " +
