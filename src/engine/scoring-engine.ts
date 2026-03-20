@@ -7,7 +7,7 @@ import { evaluateCondition } from './compounding-engine.js';
 
 export function createInitialScores(): ScoreDimensions {
   return {
-    solvency_ratio: 150,
+    solvency_ratio: 135,
     cumulative_pnl: 0,
     regulatory_standing: 'green',
     regulatory_flags: 0,

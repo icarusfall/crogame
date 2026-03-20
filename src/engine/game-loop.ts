@@ -281,13 +281,13 @@ function applyInterstitialBonus(
 
   const updated = { ...scores };
 
-  // Each year of normal operations generates some profit and minor solvency improvement
-  // Base: £4m P&L per year, ±£2m variance, +0-2 solvency per year
+  // Each year of normal operations generates modest profit but solvency drifts slightly down
+  // (regulatory capital requirements tighten, new business strain, etc.)
   for (let i = 0; i < yearGap; i++) {
-    const pnlBonus = 4 + Math.floor(rng() * 5) - 2; // 2 to 7
-    const solvencyBonus = Math.floor(rng() * 3); // 0 to 2
+    const pnlBonus = 3 + Math.floor(rng() * 4) - 2; // 1 to 5
+    const solvencyDrift = -(Math.floor(rng() * 3)); // -2 to 0 (slight downward pressure)
     updated.cumulative_pnl += pnlBonus;
-    updated.solvency_ratio += solvencyBonus;
+    updated.solvency_ratio += solvencyDrift;
   }
 
   // Clamp

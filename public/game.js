@@ -267,8 +267,13 @@ function renderOutcome(result) {
     if (value === 0 || value === undefined) continue;
 
     const item = document.createElement('span');
-    const isPositive = typeof value === 'number' && value > 0;
-    const isNegative = typeof value === 'number' && value < 0;
+    // For regulatory flags, polarity is inverted: more flags = bad, fewer = good
+    const isPositive = key === 'regulatory_standing'
+      ? (typeof value === 'number' && value < 0)
+      : (typeof value === 'number' && value > 0);
+    const isNegative = key === 'regulatory_standing'
+      ? (typeof value === 'number' && value > 0)
+      : (typeof value === 'number' && value < 0);
     item.className = `score-change-item ${isPositive ? 'positive' : isNegative ? 'negative' : 'neutral'}`;
 
     let display;

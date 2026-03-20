@@ -52,11 +52,11 @@ export const privateCreditCrunch: Scenario = {
         // Higher exposure from yield grab = bigger hit
         {
           condition: 'private_credit_exposure > 0.5',
-          impact: { solvency_ratio: -12, cumulative_pnl: -25, board_confidence: -5 },
+          impact: { solvency_ratio: -18, cumulative_pnl: -45, board_confidence: -8 },
         },
         {
           condition: 'private_credit_exposure > 0.2',
-          impact: { solvency_ratio: -5, cumulative_pnl: -10 },
+          impact: { solvency_ratio: -8, cumulative_pnl: -20 },
         },
         // Severe writedown
         {
@@ -344,7 +344,7 @@ export const privateCreditCrunch: Scenario = {
         // Already heavily exposed
         {
           condition: 'private_credit_exposure > 0.5',
-          impact: { solvency_ratio: -5, cumulative_pnl: -10, regulatory_standing: 1 },
+          impact: { solvency_ratio: -10, cumulative_pnl: -20, regulatory_standing: 1 },
         },
         // PRA will not like you adding risk
         {

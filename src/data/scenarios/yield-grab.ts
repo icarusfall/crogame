@@ -17,7 +17,7 @@ export const yieldGrab: Scenario = {
     "He turns to you. 'I'm not asking us to do anything crazy. I'm asking whether our risk appetite is still fit for purpose.'\n\n" +
     "The Head of Internal Ratings catches your eye from across the table. She is doing the thing with her eyebrows.",
   random_params: {
-    sphinx_outperformance: { type: 'uniform', min: 60, max: 120, unit: 'bps' },
+    sphinx_outperformance: { type: 'uniform', min: 100, max: 200, unit: 'bps' },
   },
   options: [
     {
@@ -55,10 +55,10 @@ export const yieldGrab: Scenario = {
       label: 'Expand private credit — but only what we can rate internally',
       description:
         'Agree to increase yield through infrastructure debt and carefully selected private assets ' +
-        'that the internal ratings team can properly assess. Captures ~25-30bps.',
+        'that the internal ratings team can properly assess. Captures ~100-120bps of illiquidity premium.',
       consequences: {
         solvency_ratio: 0,
-        cumulative_pnl: 12,
+        cumulative_pnl: 25,
         board_confidence: 3,
         reputation: 0,
         regulatory_standing: 0,
@@ -78,10 +78,10 @@ export const yieldGrab: Scenario = {
       label: 'Go bigger — increase high yield and lower-rated private credit',
       description:
         'Approve a 15% shift from IG into HY credit and BB-rated private assets. ' +
-        'Yield pickup of 60-70bps. MA benefit on some assets is questionable.',
+        'Yield pickup of 150-200bps on the private allocation. MA benefit on some assets is questionable.',
       consequences: {
         solvency_ratio: 0,
-        cumulative_pnl: 30,
+        cumulative_pnl: 55,
         board_confidence: 5,
         reputation: 0,
         regulatory_standing: 1,
@@ -106,7 +106,7 @@ export const yieldGrab: Scenario = {
       consequences: {
         // Base consequences — modified by sub-choice
         solvency_ratio: 0,
-        cumulative_pnl: 15,
+        cumulative_pnl: 30,
         board_confidence: 2,
         reputation: 0,
         regulatory_standing: 0,
@@ -118,10 +118,10 @@ export const yieldGrab: Scenario = {
           id: 'yield_grab_opt4_existing',
           label: 'Keep existing manager',
           description:
-            'The existing manager is cautious by nature. +15-20bps yield improvement. ' +
+            'The existing manager is cautious by nature. ~120bps illiquidity premium on private assets. ' +
             'Risk of amplified drawdowns in fast-moving markets.',
           consequences: {
-            cumulative_pnl: 15,
+            cumulative_pnl: 30,
             board_confidence: 1,
           },
           narrative_snippet:
@@ -138,10 +138,10 @@ export const yieldGrab: Scenario = {
           id: 'yield_grab_opt4_goldman',
           label: 'Hire the Goldman trader',
           description:
-            "Year 1 will be spectacular (+40bps). Year 2, he'll push for wider limits and call risk 'speed bumps.' " +
+            "Year 1 will be spectacular (~200bps above benchmark). Year 2, he'll push for wider limits and call risk 'speed bumps.' " +
             'When market turns, concentrated position produces sudden large loss.',
           consequences: {
-            cumulative_pnl: 40,
+            cumulative_pnl: 70,
             board_confidence: 5,
             reputation: -5,
           },
@@ -172,7 +172,7 @@ export const yieldGrab: Scenario = {
         "The CFO looks slightly alarmed, which is a first.",
       consequences: {
         solvency_ratio: -10,
-        cumulative_pnl: 50,
+        cumulative_pnl: 85,
         board_confidence: 8,
         reputation: 0,
         regulatory_standing: 1,
